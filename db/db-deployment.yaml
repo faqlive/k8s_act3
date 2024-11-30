@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deployment
+  namespace: moodle-namespace
+  labels:
+    app: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+      - name: mariadb
+        image: facundolopezunir/app-db:latest
+        env:
+        - name: MARIADB_DATABASE
+          value: "moodle"
+        - name: MARIADB_USER
+          value: "moodle_user"
+        - name: MARIADB_PASSWORD
+          value: "moodle_password"
+        - name: MARIADB_ROOT_PASSWORD
+          value: "root_password"
+        volumeMounts:
+        - name: db-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: db-storage
+        persistentVolumeClaim:
+          claimName: db-pvc

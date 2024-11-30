@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moodle-deployment
+  namespace: moodle-namespace
+  labels:
+    app: moodle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: moodle
+  template:
+    metadata:
+      labels:
+        app: moodle
+    spec:
+      containers:
+      - name: moodle
+        image: facundolopezunir/app-moodle:latest
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        - name: MOODLE_DATABASE_HOST
+          value: "db-service"
+        - name: MOODLE_DATABASE_USER
+          value: "moodle_user"
+        - name: MOODLE_DATABASE_PASSWORD
+          value: "moodle_password"
+        - name: MOODLE_DATABASE_NAME
+          value: "moodle"
+        - name: MOODLE_USERNAME
+          value: "user"
+        - name: MOODLE_PASSWORD
+          value: "p4ssw0rd"
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: moodle-storage
+          mountPath: /bitnami/moodle
+        - name: moodledata-storage
+          mountPath: /bitnami/moodledata
+      volumes:
+      - name: moodle-storage
+        persistentVolumeClaim:
+          claimName: moodle-pvc
+      - name: moodledata-storage
+        persistentVolumeClaim:
+          claimName: moodledata-pvc
