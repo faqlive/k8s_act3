@@ -4,11 +4,11 @@ metadata:
   name: nodejs-service
   namespace: nodejs-mongo-namespace
   labels:
-    app: nodejs
+    app: nodeapp
 spec:
   type: LoadBalancer
   selector:
-    app: nodejs
+    app: nodeapp
   ports:
   - protocol: TCP
     port: 30000

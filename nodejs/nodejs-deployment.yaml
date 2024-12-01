@@ -1,30 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nodejs-deployment
-  namespace: nodejs-mongo-namespace
-  labels:
-    app: nodejs
+  name: nodeapp-deployment
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
-      app: nodejs
+      app: nodeapp
   template:
     metadata:
       labels:
-        app: nodejs
+        app: nodeapp
     spec:
       containers:
-      - name: nodejs
-        image: aleksunir/act02_nodejs
-        ports:
-        - containerPort: 3000
+      - name: nodeapp
+        image: aleksunir/k8s-node-app:latest
         env:
         - name: MONGO_URL
-          valueFrom:
-            configMapKeyRef:
-              name: nodejs-config
-              key: MONGO_URL
-        securityContext:
-          runAsUser: 0
+          value: "mongodb://mongodb:27017/db"
+        ports:
+        - containerPort: 3000
