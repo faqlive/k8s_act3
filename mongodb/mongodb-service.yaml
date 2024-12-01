@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongodb
-  namespace: nodejs-app
+  namespace: nodejs-namespace
   labels:
     app: mongodb
 spec:
